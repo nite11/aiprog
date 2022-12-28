@@ -1,20 +1,21 @@
 from z3 import *
-x = Int('x')
-y = Int('y')
+x1, x2 = Ints('x1 x2')
+
 
 s = Solver()
-##s.add(4 * x == 20)
-s.add(x * y == 10)
-s.add(x<10)
-
-for i in range(2):
-    print(s.check())
-    print(s.model())
-    s.add(x!=s.model()[x])
-
-while s.check()==sat:
-    print(s.model())
-    s.add(x!=s.model()[x])
-
-
+s.add(Or(x1*x2==10,x1==2))
+numOfSol=0
+while s.check()!=unsat and numOfSol<2:
+    numOfSol+=1
+    m=s.model()
+    l=0
+    cons=""
+    print(m)    
+    while l <len(m.decls()):
+        cons+=f"{m[l]}!={m[m[l]]},"
+        l+=1
+    print(cons)
+    s.add(eval(cons))
+print(s.check())
+print("Number of solutions found so far:",numOfSol)
 
