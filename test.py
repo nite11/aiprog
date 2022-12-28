@@ -3,9 +3,9 @@ x1, x2 = Ints('x1 x2')
 
 
 s = Solver()
-s.add(Or(x1*x2==10,x1==2))
+s.add(Or(x1*x2==10 , Or(x1==6,x2==x1)))
 numOfSol=0
-while s.check()!=unsat and numOfSol<2:
+while s.check()!=unsat and numOfSol<11:
     numOfSol+=1
     m=s.model()
     l=0

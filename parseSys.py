@@ -12,7 +12,7 @@ if contentL.find("such")!=-1:
 else:
     equations=content[contentL.find("solve")+5:contentL.find(".")]
     
-
+##add code to verify that equations does not have and or
 equations=equations.strip().replace("\n", "").replace("=", "==")
 constraints=constraints.strip().replace("\n", "").replace(" ", "")
 print(equations)
