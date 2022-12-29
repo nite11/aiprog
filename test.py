@@ -1,9 +1,11 @@
 from z3 import *
-x1, x2 = Ints('x1 x2')
+x, y,z = Ints('x y z')
 
 
 s = Solver()
-s.add(Or(x1*x2==10 , Or(x1==6,x2==x1)))
+s.add(x + y + z == 10,x - z == 5)
+s.add (Or(x>5,And(x<-5,y>0)))
+s.add(z<0)
 numOfSol=0
 while s.check()!=unsat and numOfSol<11:
     numOfSol+=1

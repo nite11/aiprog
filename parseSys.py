@@ -1,3 +1,5 @@
+import re
+
 with open('sys.txt','r') as f:
     contentL=f.read().lower()##.splitlines()    
     f.seek(0)
@@ -17,6 +19,43 @@ equations=equations.strip().replace("\n", "").replace("=", "==")
 constraints=constraints.strip().replace("\n", "").replace(" ", "")
 print(equations)
 print(constraints)
+
+constraintList=constraints.split(",")
+
+def makeConstraint(constraint):
+    l=len(constraint)
+    while l>1:
+        for i in range(len(constraint)):
+            if constraint[i]=="and":
+                constraint[i-1]=f"And({constraint[i-1]},{constraint[i+1]})"
+                constraint[i]=''
+                constraint[i+1]=''
+                l-=2
+
+        for i in range(len(constraint)):
+            if constraint[i]=="or":
+                constraint[i-1]=f"Or({constraint[i-1]},{constraint[i+1]})"
+                constraint[i]=''
+                constraint[i+1]=''
+                l-=2
+    return constraint[0]
+
+
+for k in range(len(constraintList)):
+    constraintList[k]=re.split('(or|and)', constraintList[k])
+    constraintList[k]=makeConstraint(constraintList[k])
+       ## x>5orx<-5andy>0,z<0
+
+print(constraintList)
+
+
+
+
+
+
+    
+
+
 
 
 
