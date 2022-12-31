@@ -28,4 +28,6 @@ while s.check()!=unsat and numOfSol<2:
     s.add(x1!=m[x1])
 print(s.check())
 print("Number of solutions found so far:",numOfSol)
+text="a("
+print(text[0:-3])
 

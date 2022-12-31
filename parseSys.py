@@ -15,6 +15,7 @@ else:
     equations=content[contentL.find("solve")+5:contentL.find(".")]
     
 ##add code to verify that equations does not have and or
+##add code for 2 ands and 1 or
 equations=equations.strip().replace("\n", "").replace("=", "==")
 
 varList=[]
@@ -34,7 +35,27 @@ print(varList)
 equationList=equations.split(",")
 constraintList=constraints.split(",")
 
+def resolveBrackets(constraint):  ##x>5or(x<-5andy<0)
+    closing=[]   ##to capture the position of closing parenthesis
+    opening=[]   ##to capture the position of opening parenthesis
+    for j in range(len(constraint)):
+        if constraint[j]==')':
+            closing.append(j)
+
+    for j in range(len(constraint)):
+        if constraint[j]=='(':
+            opening.append(j)
+
+    while(len(opening)>0):
+        constraint=constraint[0:opening[-1]] + \
+                    makeConstraint(constraint[opening[-1]+1:closing[0]]) + \
+                    constraint[closing[0]+1:]
+        opening.pop(-1)
+        closing.pop(0)
+    return constraint
+
 def makeConstraint(constraint):
+    constraint=re.split('(or|and)', constraint)
     l=len(constraint)
     while l>1:
         for i in range(len(constraint)):
@@ -54,7 +75,8 @@ def makeConstraint(constraint):
 
 
 for k in range(len(constraintList)):
-    constraintList[k]=re.split('(or|and)', constraintList[k])
+    constraintList[k]=resolveBrackets(constraintList[k])
+    
     constraintList[k]=makeConstraint(constraintList[k])
        ## x>5orx<-5andy>0,z<0
 
