@@ -16,7 +16,10 @@ else:
     
 ##add code to verify that equations does not have and or
 ##add code for 2 ands and 1 or
-equations=equations.strip().replace("\n", "").replace("=", "==")
+equations=equations.strip().replace("\n", "").replace("=", "==").replace(" ", "")
+if equations.find("and") !=-1 or equations.find("or")  !=-1:
+    equations="User error: eqautions are not allowed to contain composite boolean expressions"
+
 
 varList=[]
 
@@ -26,7 +29,7 @@ for c in equations:
 
 
 
-constraints=constraints.strip().replace("\n", "").replace(" ", "")
+constraints=constraints.strip().replace("\n", "").replace(" ", "").replace("=", "==")
 ##print(equations)
 print(varList)
 
