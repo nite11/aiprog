@@ -11,12 +11,14 @@ for eq in parseSys.equationList:
     s.add(eval(eq))
 
 for con in parseSys.constraintList:
-    s.add(eval(con))
+    if con!='':
+        s.add(eval(con))
 
 
+##s.add(u==7,z==0,v==-1,t==7)
 
 numOfSol=0
-while s.check()!=unsat and numOfSol<2:
+while s.check()!=unsat and numOfSol<3:
     numOfSol+=1
     m=s.model()
     l=0

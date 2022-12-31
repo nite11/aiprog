@@ -57,20 +57,29 @@ def resolveBrackets(constraint):  ##x>5or(x<-5andy<0)
 def makeConstraint(constraint):
     constraint=re.split('(or|and)', constraint)
     l=len(constraint)
-    while l>1:
-        for i in range(len(constraint)):
-            if constraint[i]=="and":
+    i=-1
+    while constraint.count('and')>0:
+        i+=1
+        if constraint[i]=="and":
                 constraint[i-1]=f"And({constraint[i-1]},{constraint[i+1]})"
-                constraint[i]=''
-                constraint[i+1]=''
+                constraint.pop(i)
+                constraint.pop(i)
                 l-=2
-
-        for i in range(len(constraint)):
-            if constraint[i]=="or":
+                i=-1
+        
+    i=-1
+    while constraint.count('or')>0:
+        i+=1
+        if constraint[i]=="or":
                 constraint[i-1]=f"Or({constraint[i-1]},{constraint[i+1]})"
-                constraint[i]=''
-                constraint[i+1]=''
+                constraint.pop(i)
+                constraint.pop(i)
                 l-=2
+                i=-1       
+                
+        
+
+        
     return constraint[0]
 
 
