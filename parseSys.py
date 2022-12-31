@@ -39,22 +39,39 @@ equationList=equations.split(",")
 constraintList=constraints.split(",")
 
 def resolveBrackets(constraint):  ##x>5or(x<-5andy<0)
-    closing=[]   ##to capture the position of closing parenthesis
-    opening=[]   ##to capture the position of opening parenthesis
+    position=[]   ##to capture the position of  parenthesis
+    
     for j in range(len(constraint)):
-        if constraint[j]==')':
-            closing.append(j)
+        if constraint[j]==')' or constraint[j]=='(':
+            position.append([j,constraint[j]])
 
-    for j in range(len(constraint)):
-        if constraint[j]=='(':
-            opening.append(j)
+        
+    ##print(position)
+    i=1
+    while(len(position)>0):    
+        position=[]   ##to capture the position of  parenthesis
+    
+        for j in range(len(constraint)):
+            if constraint[j]==')' or constraint[j]=='(':
+                position.append([j,constraint[j]])    
+        ##print(i)
+        ##print(position)
+        if position[i][1]==')':
+            ##print(constraint[position[i-1][0]+1:position[i][0]])
+            constraint=constraint[0:position[i-1][0]] + \
+                    makeConstraint(constraint[position[i-1][0]+1:position[i][0]]) + \
+                    constraint[position[i][0]+1:]
+            ##print(constraint)
+            position.pop(i-1)
+            position.pop(i-1)
+            i-=1
 
-    while(len(opening)>0):
-        constraint=constraint[0:opening[-1]] + \
-                    makeConstraint(constraint[opening[-1]+1:closing[0]]) + \
-                    constraint[closing[0]+1:]
-        opening.pop(-1)
-        closing.pop(0)
+                
+        else:
+            i+=1 
+        
+            
+    ##print("success")    
     return constraint
 
 def makeConstraint(constraint):
