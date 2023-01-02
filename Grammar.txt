@@ -1,0 +1,13 @@
+Grammar := 'Solve' <equations> 'such that' <constraints> '.' | 'Solve' <equations> '.'
+
+<equations> := <equation> | <equations> ',' <equations>
+<constraints> := <constraint> | <constraints> ',' <constraints>
+
+<equation> := <expr> '=' <expr>
+<constraint> := ((<expr>) '>' (<expr>)) | ((<constraint>) <boolop> (<constraint>))
+
+<expr> := <constant> | <variable> | ((<expr>) <binop> (<expr>))
+<constant> := _Integer_
+<variable> := _String_
+<binop> := + | * | -
+<boolop> := and | or
