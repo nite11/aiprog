@@ -1,4 +1,4 @@
 Solve
-2 * x + y*y + (z - u) - 3*v = t
+x+(-y)+(-z) = 0,y=3,z=2
 such that
-x < 15 or x > 20 and y < 10 or y > 5 and z < 0.
+.

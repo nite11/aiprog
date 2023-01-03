@@ -2,7 +2,7 @@ import math
 
 class Expr:
     def __add__(self, other):
-        if isinstance(other, int) or isinstance(other, float):
+        if isinstance(other, int):
             other = Con(other)
 
         if isinstance(other, str):
@@ -14,8 +14,21 @@ class Expr:
         print(f"Non-matching types for +: {type(self)} and {type(other)}")
         return None
 
+    def __minus__(self, other):
+        if isinstance(other, int):
+            other = Con(other)
+
+        if isinstance(other, str):
+            other = Var(other)
+            
+        if isinstance(other, Expr):
+            return Minus(self, other)
+
+        print(f"Non-matching types for -: {type(self)} and {type(other)}")
+        return None
+
     def __mul__(self, other):
-        if isinstance(other, int) or isinstance(other, float):
+        if isinstance(other, int):
             other = Con(other)
 
         if isinstance(other, str):
@@ -24,14 +37,14 @@ class Expr:
         if isinstance(other, Expr):
             return Times(self, other)
 
-        print(f"Non-matching types for +: {type(self)} and {type(other)}")
+        print(f"Non-matching types for *: {type(self)} and {type(other)}")
         return None
 
     def simplify(self):
         return self
     
 class Con(Expr):
-    def __init__(self, val : float):
+    def __init__(self, val : int):
         self.val = val
 
     def ev(self, env={}):
@@ -45,9 +58,6 @@ class Con(Expr):
             return self.val == other.val
 
         return False
-
-    def diff(self, var):
-        return Con(0)
 
     def vars(self):
         return []
@@ -68,33 +78,8 @@ class Var(Expr):
 
         return False
 
-    def diff(self, var):
-        if var == self.name:
-            return Con(1)
-        else:
-            return Con(0)
-
     def vars(self):
         return [self.name]
-        
-class UnOp(Expr):
-    def __init__(self, arg : Expr):
-        self.arg = arg
-
-    def ev(self, env={}):
-        return self.op(self.arg.ev(env))
-
-    def __str__(self):
-        return f"{self.name}({self.arg})"
-
-    def __eq__(self, other):
-        if isinstance(other, UnOp) and self.name == other.name:
-            return self.arg == other.arg
-
-        return False
-
-    def vars(self):
-        return self.arg.vars()
 
 class BinOp(Expr):
     def __init__(self, left : Expr, right : Expr):
@@ -130,9 +115,6 @@ class Plus(BinOp):
     def op(self, x, y):
         return x + y
 
-    def diff(self, var):
-        return self.left.diff(var) + self.right.diff(var)
-
     def simplify(self):
         (simple_left,  ev_l) = simplify_and_evaluate(self.left)
         (simple_right, ev_r) = simplify_and_evaluate(self.right)
@@ -146,6 +128,27 @@ class Plus(BinOp):
             return simple_left
        
         return simple_left + simple_right
+
+class Minus(BinOp):
+
+    name = '-'
+    
+    def op(self, x, y):
+        return x - y
+
+    def simplify(self):
+        (simple_left,  ev_l) = simplify_and_evaluate(self.left)
+        (simple_right, ev_r) = simplify_and_evaluate(self.right)
+        
+        if ev_l != None and ev_r != None:
+           return Con(ev_l - ev_r)
+       
+        if ev_l == 0:
+            return Con(0) - simple_right
+        if ev_r == 0:
+            return simple_left
+       
+        return simple_left - simple_right
     
 class Times(BinOp):
 
@@ -153,9 +156,6 @@ class Times(BinOp):
     
     def op(self, x, y):
         return x * y
-
-    def diff(self, var):
-        return self.left.diff(var) * self.right + self.left * self.right.diff(var)
 
     def simplify(self):
         (simple_left,  ev_l) = simplify_and_evaluate(self.left)
@@ -176,35 +176,14 @@ class Times(BinOp):
         return simple_left * simple_right
     
     
-class Exp(UnOp):
 
-    name = 'exp'
-    
-    def op(self, x):
-        return math.exp(x)
 
-    def diff(self, var):
-        return self * self.arg.diff(var)
+e1 = Minus(Con(-7),Minus(Var('x'), Var('y')))
 
-    def simplify(self):
-        (simple_arg, ev_arg) = simplify_and_evaluate(self.arg)
 
-        if ev_arg != None:
-            return Con(math.exp(ev_arg))
+env = {'x' : 2, 'y' : -1,'z': 9}
+print(e1)
+print(e1.ev(env))
 
-        if isinstance(simple_arg, Plus):
-            (simple_left,  ev_l) = simplify_and_evaluate(simple_arg.left)
-            (simple_right, ev_r) = simplify_and_evaluate(simple_arg.right)
 
-            if ev_l != None:
-                return (Con(math.exp(ev_l))*Exp(simple_right))
-            if ev_r != None:
-                return (Exp(simple_left)*math.exp(ev_r))
 
-        return Exp(simple_arg)
-
-e1 = Plus(Times(Var('x'), Var('y')), Con(7))
-e2 = Exp(e1)
-
-env = {'x' : 2, 'y' : -1}
-print(e2)
