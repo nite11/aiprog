@@ -18,7 +18,7 @@ for con in parseSys.constraintList:
         s.add(eval(con))
 
 
-##s.add(x!=0)
+#s.add(t==7,u==7,x==1,z==0)
 
 numOfSol=0
 while s.check()==sat and numOfSol<3:

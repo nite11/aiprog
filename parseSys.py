@@ -18,10 +18,17 @@ if equations.find("and") !=-1 or equations.find("or")  !=-1:
     equations="User error: equations are not allowed to contain composite boolean expressions"
 
 
-varList=[]
+
+v=''
 for c in equations:
-    if c.isalpha() and c not in varList:
-        varList.append(c)
+    if c.isalpha():
+        v+=c
+    else:
+        v+=' '
+varList=v.split(' ')  
+varList=[i for i in varList if i != '']   
+varList=list(dict.fromkeys(varList))  #remove duplicates
+        
 
 constraints=constraints.strip().replace("\n", "").replace(" ", "").replace("=", "==").replace("!==", "!=")
 ##print(equations)
