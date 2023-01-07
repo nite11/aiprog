@@ -102,8 +102,7 @@ for eq in ps.equationList:
     d = dict.fromkeys(string.ascii_uppercase, '')
 
 
-    #timesm with *-
-    #times with *
+    
 
 
 
