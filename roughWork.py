@@ -33,7 +33,7 @@ def putBrackets(expr):
             expr=[j for j in expr if j!= '']
             i+=1        
             if expr[i]=='*' and expr[i+1]=='-':
-                expr[i]=exprAlpha(f"{expr[i-1]}times-{expr[i+2]}")
+                expr[i]=exprAlpha(f"{expr[i-1]}timesm{expr[i+2]}")
                 expr[i-1]=''
                 expr[i+1]=''
                 expr[i+2]=''
@@ -47,7 +47,7 @@ def putBrackets(expr):
     for e in expr:
         expr1+=e 
 
-    return exprAlpha(expr1)
+    return exprAlpha(rightAss(expr1))
 
 def resolveBrackets(expr):  ##x>5or(x<-5andy<0)
     position=[]   ##to capture the position of  parenthesis
@@ -79,18 +79,31 @@ def resolveBrackets(expr):  ##x>5or(x<-5andy<0)
     ##print("success")    
     return expr
 
+def rightAss(expr):
+    expr=re.split('(\+|\-)', expr)
+    
+    while len(expr)>1:
+        expr[-3]=f"[{expr[-3]}{expr[-2]}{expr[-1]}]"
+        expr.pop()
+        expr.pop()
 
+    return (''.join(expr))
 
 for eq in ps.equationList:
     eq=eq.split('==')
     #print(eq[0])
-    eq[0]=resolveBrackets(eq[0])        
-    print(unPack(putBrackets(eq[0])))
+    eq[0]=resolveBrackets(eq[0])    
+    eq[0]=unPack(putBrackets(eq[0])).replace('timesm','*-').replace('times','*')
+    print(eq[0])
     d = dict.fromkeys(string.ascii_uppercase, '')
 
     eq[1]=resolveBrackets(eq[1])
     print(unPack(putBrackets(eq[1])))
     d = dict.fromkeys(string.ascii_uppercase, '')
+
+
+    #timesm with *-
+    #times with *
 
 
 
