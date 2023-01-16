@@ -1,13 +1,15 @@
-Grammar := 'Solve' <equations> 'such that' <constraints> '.' | 'Solve' <equations> '.'
+system  = "Solve" {s} equations "such that" {s} constraints "." | "Solve" {s} equations "."
 
-<equations> := <equation> | <equations> ',' <equations>
-<constraints> := <constraint> | <constraints> ',' <constraints>
+equations  =  equation {s}|  equations {s} ","  equations {s}
+constraints  =  constraint {s} |  constraints {s} ","  constraints {s}
 
-<equation> := <expr> '=' <expr>
-<constraint> := ((<expr>) '>' (<expr>)) | ((<constraint>) <boolop> (<constraint>))
+equation  =  {s} expr {s} "=" {s} expr {s}
+constraint  = ((expr) {s} ">" {s} (expr)) | ((constraint) {s} boolop {s} (constraint))
 
-<expr> := <constant> | <variable> | ((<expr>) <binop> (<expr>))
-<constant> := _Integer_
-<variable> := _String_
-<binop> := + | * | -
-<boolop> := and | or
+expr  =  constant |  variable | ((expr) {s} binop {s} (expr))
+constant  = ["-"],#'[0-9]+'
+variable  = ["-"],#'[a-z]+'
+binop  = "+" | "*" | "-"
+boolop  = "and" | "or"
+s = spaces
+spaces = " " | "\n" | "\t" | spaces,spaces
