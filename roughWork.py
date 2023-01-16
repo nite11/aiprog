@@ -25,19 +25,22 @@ def unPack(key):
 
 def putBrackets(expr):
     expr=re.split('(\*|\+|\-)', expr)
+    expr=[j for j in expr if j!= '']
     
     expr1=''
     #print(expr)
-    i=0
+    i=len(expr)-1
+    
     while expr.count('*')>0:
             expr=[j for j in expr if j!= '']
-            i+=1        
-            if expr[i]=='*' and expr[i+1]=='-':
-                expr[i]=exprAlpha(f"{expr[i-1]}timesm{expr[i+2]}")
+            #print(expr,i)
+            i-=1        
+            if expr[i]=='-' and expr[i-1]=='*':
+                expr[i]=exprAlpha(f"{expr[i-2]}timesm{expr[i+1]}")
                 expr[i-1]=''
                 expr[i+1]=''
-                expr[i+2]=''
-                i-=1
+                expr[i-2]=''
+                i-=2
             if expr[i]=='*':
                 expr[i]=exprAlpha(f"{expr[i-1]}times{expr[i+1]}")
                 expr[i-1]=''
