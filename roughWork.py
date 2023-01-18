@@ -97,11 +97,41 @@ def rightAss(expr):
 
     return (''.join(expr))
 
+def removeBrackets(expr):
+    print(len(expr))
+    i=1
+    position=[]   ##to capture the position of  parenthesis
+    for j in range(len(expr)):
+            if expr[j]==']' or expr[j]=='[':
+                position.append([j,expr[j]])  
+    while len(position)>0 and i<=position[-1][0]:    
+          
+        print(position,expr,i,expr[i])
+        
+        ##print(position)
+        if position[i][1]==']':
+            m=position[i][0]
+            n=position[i-1][0]
+
+            if expr[m+1]==']' and expr[n-1]=='[':
+                expr[m+1]=' ' 
+                expr[n-1]=' '
+            else:
+                i+=1
+        else:
+            i+=1   
+                            
+         
+
+    ##print("success")    
+    return expr
+
 for eq in ps.equationList:
     eq=eq.split('==')
     #print(eq[0])
     eq[0]=resolveBrackets(eq[0])    
     eq[0]=unPack(putBrackets(eq[0])).replace('timesm','*-').replace('times','*')
+    eq[0]=removeBrackets(eq[0])
     print(eq[0])
     d = dict.fromkeys(string.ascii_uppercase, '')
 
