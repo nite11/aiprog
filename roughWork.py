@@ -84,6 +84,11 @@ def resolveBrackets(expr):  ##x>5or(x<-5andy<0)
 
 def rightAss(expr):
     expr=re.split('(\+|\-)', expr)
+    expr=[j for j in expr if j!= '']
+    #print(expr)
+    if expr[0]=='-':
+        expr[1]=f"[-{expr[1]}]"
+        expr.pop(0)
     
     while len(expr)>1:
         expr[-3]=f"[{expr[-3]}{expr[-2]}{expr[-1]}]"

@@ -1,9 +1,9 @@
 Solve
 -2 * -x + y*-(y +x) - 3*-v = -t,
 -2 * -x + y*(-y + (-z - u)) - 3*-v = -t,
-2*3*4*5=u,
+-(2-x)+3*4*5=u,
 x*y-y*z-z*s=0,
-x-y-z=2,
+-x-y-z=2,
 x-y-(x-y-z)-z=5
 
 such that
