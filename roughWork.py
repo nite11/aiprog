@@ -98,45 +98,40 @@ def rightAss(expr):
     return (''.join(expr))
 
 def removeBrackets(expr):
-    print(len(expr))
-    i=1
+    #print(len(expr))
+    
     position=[]   ##to capture the position of  parenthesis
     for j in range(len(expr)):
             if expr[j]==']' or expr[j]=='[':
-                position.append([j,expr[j]])  
-    while len(position)>0 and i<=position[-1][0]:    
-          
+                position.append(j)  
+    for i in range(len(position)-1):
+    
         print(position,expr,i,expr[i])
         
         ##print(position)
-        if position[i][1]==']':
-            m=position[i][0]
-            n=position[i-1][0]
+        if expr[position[i]]==']':
+            m=position[i]
+            n=position[-i-1]
+            print(m,n)
 
             if expr[m+1]==']' and expr[n-1]=='[':
-                expr[m+1]=' ' 
-                expr[n-1]=' '
-            else:
-                i+=1
-        else:
-            i+=1   
-                            
-         
-
-    ##print("success")    
-    return expr
+                expr = expr[:m+1] + ' ' + expr[m+2:]
+                expr = expr[:n-1] + ' ' + expr[n:]
+    return expr[1:-1]
 
 for eq in ps.equationList:
     eq=eq.split('==')
     #print(eq[0])
     eq[0]=resolveBrackets(eq[0])    
     eq[0]=unPack(putBrackets(eq[0])).replace('timesm','*-').replace('times','*')
-    eq[0]=removeBrackets(eq[0])
+    eq[0]=removeBrackets(eq[0]).replace(' ','').replace('[','(').replace(']',')')
     print(eq[0])
     d = dict.fromkeys(string.ascii_uppercase, '')
 
-    eq[1]=resolveBrackets(eq[1])
-    print(unPack(putBrackets(eq[1])))
+    eq[1]=resolveBrackets(eq[1])    
+    eq[1]=unPack(putBrackets(eq[1])).replace('timesm','*-').replace('times','*')
+    eq[1]=removeBrackets(eq[1]).replace(' ','').replace('[','(').replace(']',')')
+    print(eq[1])
     d = dict.fromkeys(string.ascii_uppercase, '')
 
 
