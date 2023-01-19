@@ -53,32 +53,13 @@ def putBrackets(expr):
     return exprAlpha(rightAss(expr1))
 
 def resolveBrackets(expr,func):  ##x>5or(x<-5andy<0)
-    position=[]   ##to capture the position of  parenthesis
-    for j in range(len(expr)):
-        if expr[j]==')' or expr[j]=='(':
-            position.append([j,expr[j]])
-        
-    ##print(position)
-    i=1
-    while(len(position)>0):    
-        position=[]   ##to capture the position of  parenthesis
-        for j in range(len(expr)):
-            if expr[j]==')' or expr[j]=='(':
-                position.append([j,expr[j]])    
-        ##print(i)
-        ##print(position)
-        if position[i][1]==')':
-            ##print(constraint[position[i-1][0]+1:position[i][0]])
-            expr=expr[0:position[i-1][0]] +\
-                    func(expr[position[i-1][0]+1:position[i][0]]) +\
-                    expr[position[i][0]+1:]
+    position=matchBrackets(expr) 
+    #print(position,expr)
+    for i in range(len(position)):
+        expr=expr[0:position[i][0]] +\
+                    func(expr[position[i][0]+1:position[i][1]]) +\
+                    expr[position[i][1]+1:]
             ##print(constraint)
-            position.pop(i-1)
-            position.pop(i-1)
-            i-=1                
-        else:
-            i+=1 
-
     ##print("success")    
     return expr
 
@@ -122,9 +103,6 @@ def rightAss(expr):
     return (''.join(expr))
 
 def removeBrackets(expr):
-    #print(len(expr))
-    
-    
     position=matchBrackets(expr) 
     #print(position,expr)
     for i in range(len(position)-1):
@@ -140,12 +118,13 @@ def removeBrackets(expr):
 def matchBrackets(expr):
     position=[]
     openBr=[]
+    print(expr)
     for i in range(len(expr)):
         if expr[i]=='(':
             openBr.append(i)
         if expr[i]==')':
             position.append([openBr.pop(),i])  
-
+    print(position)
     return position
 
 
