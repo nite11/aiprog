@@ -6,7 +6,7 @@ d = dict.fromkeys(string.ascii_uppercase, '')
 #print(d)
 
 def exprAlpha(expr):            #to convert an expression to an Alphabet
-    #print(d)
+    print(d)
     for key in d.keys():
         if d[key]=='':
             d[key]='[' + expr + ']'
@@ -54,12 +54,16 @@ def putBrackets(expr):
 
 def resolveBrackets(expr,func):  ##x>5or(x<-5andy<0)
     position=matchBrackets(expr) 
+    i=0
     #print(position,expr)
-    for i in range(len(position)):
+    while i < len(position):
+        print(position,len(position))
         expr=expr[0:position[i][0]] +\
                     func(expr[position[i][0]+1:position[i][1]]) +\
                     expr[position[i][1]+1:]
-            ##print(constraint)
+        
+        position=matchBrackets(expr)
+        print(expr)
     ##print("success")    
     return expr
 
@@ -118,18 +122,19 @@ def removeBrackets(expr):
 def matchBrackets(expr):
     position=[]
     openBr=[]
-    print(expr)
+    #print(expr)
     for i in range(len(expr)):
         if expr[i]=='(':
             openBr.append(i)
         if expr[i]==')':
             position.append([openBr.pop(),i])  
-    print(position)
+    #print(position)
     return position
 
 
 def format(expr):
     expr=resolveBrackets(expr,putBrackets)    
+    print(expr)
     expr=unPack(putBrackets(expr)).replace('timesm','*-').replace('times','*').replace('[','(').replace(']',')')
     expr=removeBrackets(expr).replace(' ','')    
     global d
