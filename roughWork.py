@@ -98,39 +98,50 @@ def rightAss(expr):
     return (''.join(expr))
 
 def removeBrackets(expr):
-    #print(len(expr))
+    print(len(expr))
     
-    position=[]   ##to capture the position of  parenthesis
-    for j in range(len(expr)):
-            if expr[j]==']' or expr[j]=='[':
-                position.append(j)  
+    
+    position=matchBrackets(expr) 
+    print(position,expr)
     for i in range(len(position)-1):
     
-        print(position,expr,i,expr[i])
+        
         
         ##print(position)
-        if expr[position[i]]==']':
-            m=position[i]
-            n=position[-i-1]
-            print(m,n)
 
-            if expr[m+1]==']' and expr[n-1]=='[':
-                expr = expr[:m+1] + ' ' + expr[m+2:]
-                expr = expr[:n-1] + ' ' + expr[n:]
-    return expr[1:-1]
+        if position[i+1][0]==position[i][0]-1 and position[i+1][1]==position[i][1]+1:
+                expr = expr[:position[i+1][1]] + ' ' + expr[position[i+1][1]+1:]
+                expr = expr[:position[i+1][0]] + ' ' + expr[position[i+1][0]+1:]
+    if position[-1][0]==0 and position[-1][1]==len(expr)-1 and len(position)>1:
+        return expr[2:-2]
+    else:
+        return expr[1:-1]
+
+def matchBrackets(expr):
+    position=[]
+    openBr=[]
+    for i in range(len(expr)):
+        if expr[i]=='(':
+            openBr.append(i)
+        if expr[i]==')':
+            position.append([openBr.pop(),i])  
+
+    return position
+
+
 
 for eq in ps.equationList:
     eq=eq.split('==')
     #print(eq[0])
     eq[0]=resolveBrackets(eq[0])    
-    eq[0]=unPack(putBrackets(eq[0])).replace('timesm','*-').replace('times','*')
-    eq[0]=removeBrackets(eq[0]).replace(' ','').replace('[','(').replace(']',')')
+    eq[0]=unPack(putBrackets(eq[0])).replace('timesm','*-').replace('times','*').replace('[','(').replace(']',')')
+    eq[0]=removeBrackets(eq[0]).replace(' ','')
     print(eq[0])
     d = dict.fromkeys(string.ascii_uppercase, '')
 
     eq[1]=resolveBrackets(eq[1])    
-    eq[1]=unPack(putBrackets(eq[1])).replace('timesm','*-').replace('times','*')
-    eq[1]=removeBrackets(eq[1]).replace(' ','').replace('[','(').replace(']',')')
+    eq[1]=unPack(putBrackets(eq[1])).replace('timesm','*-').replace('times','*').replace('[','(').replace(']',')')
+    eq[1]=removeBrackets(eq[1]).replace(' ','')
     print(eq[1])
     d = dict.fromkeys(string.ascii_uppercase, '')
 
