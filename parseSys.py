@@ -72,6 +72,7 @@ def resolveBrackets(constraint):  ##x>5or(x<-5andy<0)
 
 def makeConstraint(constraint):
     constraint=re.split('(or|and)', constraint)
+    #print(constraint)
     
     i=0
     while constraint.count('and')>0:
@@ -100,6 +101,8 @@ for k in range(len(constraintList)):
     constraintList[k]=constraintList[k].replace('[','(').replace(']',')')
        ## x>5orx<-5andy>0,z<0
 
+
+#equationList=rw.formatEq(equationList)
 print("constraintList: ",constraintList)
 print("equationList: ",equationList,rw.formatEq(equationList))
 

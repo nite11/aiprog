@@ -1,7 +1,7 @@
-
 import re
 import string
 
+#global d
 d = dict.fromkeys(string.ascii_uppercase, '')
 #print(d)
 
@@ -137,7 +137,11 @@ def formatEq(equationList):
     for eq in equationList:
         eq=eq.split('==')
         eqList.append(f"{format(eq[0])}=={format(eq[1])}")
+        print(eq)
     return eqList
+
+
+     
     
 
     
