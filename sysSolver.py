@@ -1,19 +1,19 @@
-import parseSys
+import parseSys as ps
 
 from z3 import *
 
 numVar=0 ##number of variables
-for i in range(len(parseSys.varList)):
-    exec(f"{parseSys.varList[i]}=Int('{parseSys.varList[i]}')")
+for i in range(len(ps.varList)):
+    exec(f"{ps.varList[i]}=Int('{ps.varList[i]}')")
     numVar+=1
 
 
 
 s = Solver()   
-for eq in parseSys.equationList:
+for eq in ps.equationList:
     s.add(eval(eq))
 
-for con in parseSys.constraintList:
+for con in ps.constraintList:
     if con!='':
         s.add(eval(con))
 

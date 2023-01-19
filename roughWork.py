@@ -52,7 +52,7 @@ def putBrackets(expr):
 
     return exprAlpha(rightAss(expr1))
 
-def resolveBrackets(expr):  ##x>5or(x<-5andy<0)
+def resolveBrackets(expr,func):  ##x>5or(x<-5andy<0)
     position=[]   ##to capture the position of  parenthesis
     for j in range(len(expr)):
         if expr[j]==')' or expr[j]=='(':
@@ -70,7 +70,7 @@ def resolveBrackets(expr):  ##x>5or(x<-5andy<0)
         if position[i][1]==')':
             ##print(constraint[position[i-1][0]+1:position[i][0]])
             expr=expr[0:position[i-1][0]] +\
-                    putBrackets(expr[position[i-1][0]+1:position[i][0]]) +\
+                    func(expr[position[i-1][0]+1:position[i][0]]) +\
                     expr[position[i][0]+1:]
             ##print(constraint)
             position.pop(i-1)
@@ -81,6 +81,30 @@ def resolveBrackets(expr):  ##x>5or(x<-5andy<0)
 
     ##print("success")    
     return expr
+
+def makeConstraint(constraint):
+    constraint=re.split('(or|and)', constraint)
+    #print(constraint)
+    
+    i=0
+    while constraint.count('and')>0:
+        i+=1
+        if constraint[i]=="and":
+                constraint[i-1]=f"And[{constraint[i-1]},{constraint[i+1]}]"
+                constraint.pop(i)
+                constraint.pop(i)
+                i-=1
+
+    i=0
+    while constraint.count('or')>0:
+        i+=1
+        if constraint[i]=="or":
+                constraint[i-1]=f"Or[{constraint[i-1]},{constraint[i+1]}]"
+                constraint.pop(i)
+                constraint.pop(i)
+                i-=1
+
+    return constraint[0]
 
 def rightAss(expr):
     expr=re.split('(\+|\-)', expr)
@@ -126,9 +150,10 @@ def matchBrackets(expr):
 
 
 def format(expr):
-    expr=resolveBrackets(expr)    
+    expr=resolveBrackets(expr,putBrackets)    
     expr=unPack(putBrackets(expr)).replace('timesm','*-').replace('times','*').replace('[','(').replace(']',')')
     expr=removeBrackets(expr).replace(' ','')    
+    global d
     d = dict.fromkeys(string.ascii_uppercase, '')
     return expr
 
@@ -137,7 +162,7 @@ def formatEq(equationList):
     for eq in equationList:
         eq=eq.split('==')
         eqList.append(f"{format(eq[0])}=={format(eq[1])}")
-        print(eq)
+        #print(eq)
     return eqList
 
 
