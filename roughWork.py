@@ -1,4 +1,4 @@
-import parseSys as ps
+
 import re
 import string
 
@@ -98,16 +98,12 @@ def rightAss(expr):
     return (''.join(expr))
 
 def removeBrackets(expr):
-    print(len(expr))
+    #print(len(expr))
     
     
     position=matchBrackets(expr) 
-    print(position,expr)
+    #print(position,expr)
     for i in range(len(position)-1):
-    
-        
-        
-        ##print(position)
 
         if position[i+1][0]==position[i][0]-1 and position[i+1][1]==position[i][1]+1:
                 expr = expr[:position[i+1][1]] + ' ' + expr[position[i+1][1]+1:]
@@ -129,21 +125,22 @@ def matchBrackets(expr):
     return position
 
 
-
-for eq in ps.equationList:
-    eq=eq.split('==')
-    #print(eq[0])
-    eq[0]=resolveBrackets(eq[0])    
-    eq[0]=unPack(putBrackets(eq[0])).replace('timesm','*-').replace('times','*').replace('[','(').replace(']',')')
-    eq[0]=removeBrackets(eq[0]).replace(' ','')
-    print(eq[0])
+def format(expr):
+    expr=resolveBrackets(expr)    
+    expr=unPack(putBrackets(expr)).replace('timesm','*-').replace('times','*').replace('[','(').replace(']',')')
+    expr=removeBrackets(expr).replace(' ','')    
     d = dict.fromkeys(string.ascii_uppercase, '')
+    return expr
 
-    eq[1]=resolveBrackets(eq[1])    
-    eq[1]=unPack(putBrackets(eq[1])).replace('timesm','*-').replace('times','*').replace('[','(').replace(']',')')
-    eq[1]=removeBrackets(eq[1]).replace(' ','')
-    print(eq[1])
-    d = dict.fromkeys(string.ascii_uppercase, '')
+def formatEq(equationList):
+    eqList=[]
+    for eq in equationList:
+        eq=eq.split('==')
+        eqList.append(f"{format(eq[0])}=={format(eq[1])}")
+    return eqList
+    
+
+    
 
 
     

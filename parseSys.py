@@ -1,4 +1,5 @@
 import re
+import roughWork as rw
 
 with open('sys.txt','r') as f:
     content=f.read().lower()##.splitlines()    
@@ -100,7 +101,7 @@ for k in range(len(constraintList)):
        ## x>5orx<-5andy>0,z<0
 
 print("constraintList: ",constraintList)
-print("equationList: ",equationList)
+print("equationList: ",equationList,rw.formatEq(equationList))
 
 
 
