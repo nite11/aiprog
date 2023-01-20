@@ -1,6 +1,5 @@
 Solve
-x + y + z = 10,
-x - z = 5
-such that
-x > 5 or x < -5 and y > 0,
-z < 0.
+x*x - z = u,
+x + u = 0,
+y - 5*z = 3,
+y=3.

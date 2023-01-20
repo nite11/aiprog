@@ -81,41 +81,26 @@ def solve(filename):
     if s.check()!=sat:
         print("The system has no solution.")
 
-    numOfSol=0
-    while s.check()==sat and numOfSol<1:
-        numOfSol+=1
+    
+    else:
+        
         m=s.model()
         d={}
         
-        cons=""
+        cons="Or("
         #print(m)    
         for l in range(len(varList)):
             d.update({m[l]:m[m[l]]})
             cons+=f"{m[l]}!={m[m[l]]},"        
-            
-        #print(cons)
+        cons+=")"    
+        print(cons)
         s.add(eval(cons))
         print(d)
-    if s.check()==sat:
-        print("The system has more than 1 solution.")
-    else:
-        print("The system has only 1 solution.")
-
-if __name__ == '__main__':
-    solve('sys.txt')
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
+        if s.check()==sat:
+            print("The system has more than 1 solution.")
+        else:
+            print("The system has only 1 solution.")
+        return d
+        
+#if __name__ == '__main__':
+#    solve(sys.argv[1])
