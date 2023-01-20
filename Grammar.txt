@@ -3,13 +3,16 @@ system  = "Solve" {s} equations "such that" {s} constraints "." {s} | "Solve" {s
 equations  =  equation {s}|  equations {s} "," {s} equations {s}
 constraints  =  constraint {s} |  constraints {s} "," {s} constraints {s}
 
-equation  =  {s} expr {s} "=" {s} expr {s}
-constraint  = ["("]["("]expr[")"] {s} ">" {s} ["("]expr[")"][")"] | ["("]["("]expr[")"] {s} "<" {s} ["("]expr[")"][")"] | ["("]["("]constraint[")"] {s} boolop {s} ["("]constraint[")"][")"]
+equation  =  {s} factor {s} "=" {s} factor {s}
+constraint  = ["("]["("]factor[")"] {s} ">" {s} ["("]factor[")"][")"] | ["("]["("]factor[")"] {s} "<" {s} ["("]factor[")"][")"] | ["("]["("]constraint[")"] {s} boolop {s} ["("]constraint[")"][")"]
 
-expr  =  constant |  variable | ["("]["("]expr[")"] {s} binop {s} ["("]expr[")"][")"]
+
+expr = term {s} addsub {s} expr | term
+term = factor {s} "*" {s} term | factor
+factor  =  constant |  variable | ["-"]["("] {s} expr {s} [")"]
 constant  = ["-"]#'[0-9]+'
 variable  = ["-"]#'[a-z]+'
-binop  = "+" | "*" | "-"
+addsub  = "+" | "-"
 boolop  = "and" | "or"
 s = spaces
 spaces = " " | "\n" | "\t" | spaces,spaces

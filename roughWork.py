@@ -3,10 +3,10 @@ import string
 
 #global d
 d = dict.fromkeys(string.ascii_uppercase, '')
-#print(d)
+space=' '
 
 def exprAlpha(expr):            #to convert an expression to an Alphabet
-    print(d)
+    #print(d)
     for key in d.keys():
         if d[key]=='':
             d[key]='[' + expr + ']'
@@ -57,13 +57,13 @@ def resolveBrackets(expr,func):  ##x>5or(x<-5andy<0)
     i=0
     #print(position,expr)
     while i < len(position):
-        print(position,len(position))
+        #print(position,len(position))
         expr=expr[0:position[i][0]] +\
                     func(expr[position[i][0]+1:position[i][1]]) +\
                     expr[position[i][1]+1:]
         
         position=matchBrackets(expr)
-        print(expr)
+        #print(expr)
     ##print("success")    
     return expr
 
@@ -112,8 +112,8 @@ def removeBrackets(expr):
     for i in range(len(position)-1):
 
         if position[i+1][0]==position[i][0]-1 and position[i+1][1]==position[i][1]+1:
-                expr = expr[:position[i+1][1]] + ' ' + expr[position[i+1][1]+1:]
-                expr = expr[:position[i+1][0]] + ' ' + expr[position[i+1][0]+1:]
+                expr = expr[:position[i+1][1]] + space + expr[position[i+1][1]+1:]
+                expr = expr[:position[i+1][0]] + space + expr[position[i+1][0]+1:]
     if position[-1][0]==0 and position[-1][1]==len(expr)-1 and len(position)>1:
         return expr[2:-2]
     else:
@@ -134,9 +134,9 @@ def matchBrackets(expr):
 
 def format(expr):
     expr=resolveBrackets(expr,putBrackets)    
-    print(expr)
+    #print(expr)
     expr=unPack(putBrackets(expr)).replace('timesm','*-').replace('times','*').replace('[','(').replace(']',')')
-    expr=removeBrackets(expr).replace(' ','')    
+    expr=removeBrackets(expr).replace(space,'')    
     global d
     d = dict.fromkeys(string.ascii_uppercase, '')
     return expr

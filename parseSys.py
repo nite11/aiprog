@@ -1,8 +1,11 @@
-import re
 import roughWork as rw
 
-with open('sys.txt','r') as f:
-    content=f.read().lower()##.splitlines()    
+content=''
+
+def getFile(filename):
+    with open(filename,'r') as f:
+        global content
+        content=f.read().lower()##.splitlines()    
     
 equations=""
 constraints=""
@@ -53,8 +56,9 @@ for k in range(len(constraintList)):
 
 
 equationList=rw.formatEq(equationList)
-print("constraintList: ",constraintList)
 print("equationList: ",equationList)
+print("constraintList: ",constraintList)
+
 
 
 
