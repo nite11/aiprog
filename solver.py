@@ -1,16 +1,11 @@
 import parserFunctions as pf
 from z3 import *
 
-
-
-
-
 def parseFile(filename):
     with open(filename,'r') as f:
-        #global content
-        content=f.read().lower()##.splitlines()    
+        content=f.read().lower() 
 
-    global varList,equationList,constraintList ##number of variables
+    global varList,equationList,constraintList 
 
     equations=""
     constraints=""
@@ -22,41 +17,28 @@ def parseFile(filename):
         equations=content[content.find("solve")+5:content.find(".")]
         
 
-    equations=equations.strip().replace("\n", "").replace("=", "==").replace(" ", "").replace("!==", "!=")
+    equations=equations.strip().replace("\n", "").replace("=", "==").replace(" ", "")#.replace("!==", "!=")
     if equations.find("and") !=-1 or equations.find("or")  !=-1:
         equations="User error: equations are not allowed to contain composite boolean expressions"
 
-
-
-    v=''
-    
-    for c in equations:
+    v=''    
+    for c in equations: 
         if c.isalpha():
             v+=c
         else:
             v+=' '
     varList=v.split(' ')  
     varList=[i for i in varList if i != '']   
-    varList=list(dict.fromkeys(varList))  #remove duplicates
-          
+    varList=list(dict.fromkeys(varList))  #to remove duplicates
+    print("varList:",varList)          
 
-    constraints=constraints.strip().replace("\n", "").replace(" ", "").replace("=", "==").replace("!==", "!=")
-    ##print(equations)
-    print("varList:",varList)
-
-    ##print(constraints)
-
+    constraints=constraints.strip().replace("\n", "").replace(" ", "").replace("=", "==")#.replace("!==", "!=")
+    
     equationList=equations.split(",")
     constraintList=constraints.split(",")
-    
-    for k in range(len(constraintList)):
-        constraintList[k]=pf.resolveBrackets(constraintList[k],pf.makeConstraint)
-        constraintList[k]=pf.makeConstraint(constraintList[k])
-        constraintList[k]=constraintList[k].replace('[','(').replace(']',')')
-        ## x>5orx<-5andy>0,z<0
-
-
+           
     equationList=pf.formatEq(equationList)
+    constraintList=pf.formatCon(constraintList)
     print("equationList: ",equationList)
     print("constraintList: ",constraintList)
 
@@ -64,10 +46,8 @@ def solve(filename):
     parseFile(filename)
     
     for i in range(len(varList)):
-        exec(f"{varList[i]}=Int('{varList[i]}')")
-         
+        exec(f"{varList[i]}=Int('{varList[i]}')") #to create the Z3 integer variables
     
-    #print(len(varList))
     s = Solver()   
     for eq in equationList:
         s.add(eval(eq))
@@ -77,23 +57,16 @@ def solve(filename):
             s.add(eval(con))
 
 
-    #s.add(t==7,u==7,x==1,z==0)
     if s.check()!=sat:
         print("The system has no solution.")
-
-    
     else:
-        
         m=s.model()
-        d={}
-        
-        cons="Or("
-        #print(m)    
+        d={}        
+        cons="Or("    
         for l in range(len(varList)):
-            d.update({m[l]:m[m[l]]})
-            cons+=f"{m[l]}!={m[m[l]]},"        
+            d.update({m[l]:m[m[l]]})        #to add variable:value pair to the dictionary
+            cons+=f"{m[l]}!={m[m[l]]},"     #to form a constraint to add to the model to check for another solution
         cons+=")"    
-        print(cons)
         s.add(eval(cons))
         print(d)
         if s.check()==sat:

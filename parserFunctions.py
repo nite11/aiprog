@@ -149,6 +149,13 @@ def formatEq(equationList):
         #print(eq)
     return eqList
 
+def formatCon(constraintList):
+    for k in range(len(constraintList)):
+        constraintList[k]=resolveBrackets(constraintList[k],makeConstraint)
+        constraintList[k]=makeConstraint(constraintList[k])
+        constraintList[k]=constraintList[k].replace('[','(').replace(']',')')
+    return constraintList
+
 
      
     
