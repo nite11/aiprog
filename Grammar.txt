@@ -4,7 +4,9 @@ equations  =  equation {s}|  equations {s} "," {s} equations {s}
 constraints  =  constraint {s} |  constraints {s} "," {s} constraints {s}
 
 equation  =  {s} factor {s} "=" {s} factor {s}
-constraint  = ["("]["("]factor[")"] {s} ">" {s} ["("]factor[")"][")"] | ["("]["("]factor[")"] {s} "<" {s} ["("]factor[")"][")"] | ["("]["("]constraint[")"] {s} boolop {s} ["("]constraint[")"][")"]
+constraint  =   ["("]["("]factor[")"] {s} ">" {s} ["("]factor[")"][")"] | 
+                ["("]["("]factor[")"] {s} "<" {s} ["("]factor[")"][")"] | 
+                ["("]["("]constraint[")"] {s} boolop {s} ["("]constraint[")"][")"]
 
 
 expr = term {s} addsub {s} expr | term

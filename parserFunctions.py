@@ -78,8 +78,8 @@ def makeConstraint(constraint):     #to make and-or constraints in the Z3 boolea
 def rightAss(expr):     #to right associate the equations
     expr=re.split('(\+|\-)', expr)
     expr=[j for j in expr if j!= '']
-    if expr[0]=='-':            #hanging '-' is linked to the following factor to make a negative factor using []  
-        expr[1]=f"[-{expr[1]}]"
+    if expr[0]=='-':                #hanging '-' is linked to the following factor to make a negative factor using []  
+        expr[1]=f"[-{expr[1]}]"     #example, -(2-x)+3=u becomes (-(2-x))+3=u
         expr.pop(0)
     
     while len(expr)>1:
