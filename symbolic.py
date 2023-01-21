@@ -176,14 +176,7 @@ class Times(BinOp):
         return simple_left * simple_right
     
     
-
-
 e1 = Minus(Con(-7),Minus(Var('x'), Var('y')))
-
-
 env = {'x' : 2, 'y' : -1,'z': 9}
 print(e1)
 print(e1.ev(env))
-
-
-
